@@ -11,11 +11,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.Anderson.DBLMS.Dao.LibraryBranchDao;
+import com.Anderson.DBLMS.Menu;
 import com.Anderson.DBLMS.Dao.Dao;
+import com.Anderson.DBLMS.Entity.Borrower;
 import com.Anderson.DBLMS.Entity.LibraryBranch;
 
 public class LibraryBranchService {
 
+	
 	LibraryBranchDao lbDao = new LibraryBranchDao();
 	Dao dao = new Dao();
 	Connection conn = null;
@@ -115,12 +118,25 @@ public class LibraryBranchService {
 		List<LibraryBranch> lbList = new ArrayList();
 		LibraryBranch lb = new LibraryBranch();
 		lbList = getAll();
+		int pos = -1;
+		String name = new String();
+		
 		try {
-			lb.setBranchName(in.readLine());
-			System.out.println("Enter the LibraryBranch Id number");
-			lb.setBranchId(Integer.parseInt(in.readLine()));
-			if(lbList.contains(lb))
+			name = in.readLine();
+			System.out.println("Enter the Borrower Id number");
+			int id =Integer.parseInt(in.readLine());
+			for(Iterator<LibraryBranch> i = lbList.iterator(); i.hasNext();)
 			{
+				lb = i.next();
+				if(lb.getBranchId() == id && lb.getBranchName().equals(name))
+				{
+					 pos = lbList.indexOf(lb);
+				}
+			}
+		
+			if(pos >-1)
+			{
+			lb = lbList.get(pos);
 			System.out.println("Enter the new name or N/A to skip");
 			String input = in.readLine();
 			int count = 0;
@@ -143,7 +159,6 @@ public class LibraryBranchService {
 				System.out.println("Nothing was updated");
 			}
 			}
-			
 		}catch(IOException e)
 		{
 			e.printStackTrace();
@@ -153,5 +168,66 @@ public class LibraryBranchService {
 		}
 		
 	}
+
+	public void Update(LibraryBranch lb) {
+		Menu menu = new Menu();
+		System.out.println("You have chosen to update the Branch with branch Id: " + lb.getBranchId() + " and Branch Name: " + lb.getBranchName());
+		System.out.println("Enter quit at any prompt to cancel operation");
+		System.out.println("Enter the new name or N/A to skip");
+		String input;
+		try {
+			input = in.readLine();
+		
+		int count = 0;
+		if(!input.equalsIgnoreCase("N/A"))
+		{
+			if(input.equalsIgnoreCase("quit"))
+			{
+				System.out.println("Quitting to main menu");
+				menu.mainMenu();
+				
+			}
+			lb.setBranchName(input);
+			count++;
+		}
+		System.out.println("Enter the new address or N/A to skip");
+		input = in.readLine();
+		if(!input.equalsIgnoreCase("N/A"))
+		{
+			if(input.equalsIgnoreCase("quit"))
+			{
+				System.out.println("Quitting to main menu");
+				menu.mainMenu();
+				
+			}
+			lb.setBranchAddress(input);
+			count++;
+		}
+		if(count >0)
+		{
+		lbDao.update(lb);
+		menu.libMenu(lb);
+		}
+		else
+		{
+			System.out.println("Nothing was updated");
+			menu.libMenu(lb);
+		}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
+	public void print(List<LibraryBranch> lbList, int count)
+	{
+		lbList.forEach(lb ->System.out.println(lbList.indexOf(lb)+1 +") " + lb.getBranchName() +", " +lb.getBranchAddress() ));
+		
+		System.out.println(count + ") Quit to previous");
+	}
 }
+
+
 

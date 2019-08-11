@@ -1,5 +1,6 @@
 package com.Anderson.DBLMS.Entity;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class BookLoans {
@@ -29,14 +30,14 @@ public class BookLoans {
 	public Date getDateOut() {
 		return dateOut;
 	}
-	public void setDateOut(Date dateOut) {
-		this.dateOut = dateOut;
+	public void setDateOut(Date today) {
+		this.dateOut = today;
 	}
 	public Date getDueDate() {
 		return dueDate;
 	}
-	public void setDueDate(Date dueDate) {
-		this.dueDate = dueDate;
+	public void setDueDate(Date date) {
+		this.dueDate = date;
 	}
 	@Override
 	public int hashCode() {

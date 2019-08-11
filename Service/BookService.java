@@ -13,12 +13,11 @@ import java.util.List;
 import com.Anderson.DBLMS.Dao.BookDao;
 import com.Anderson.DBLMS.Dao.Dao;
 import com.Anderson.DBLMS.Entity.Book;
+import com.Anderson.DBLMS.Entity.Borrower;
 
 public class BookService {
 
 	BookDao bDao = new BookDao();
-	Dao dao = new Dao();
-	Connection conn = null;
 	ResultSet result = null;
 	BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 	
@@ -34,6 +33,8 @@ public class BookService {
 					Book temp = new Book();
 					temp.setBookId(result.getInt(1));
 					temp.setTitle(result.getString(2));
+					temp.setAuthId(result.getInt(3));
+					temp.setPubId(result.getInt(4));
 					bList.add(temp);
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
@@ -116,12 +117,24 @@ public class BookService {
 		List<Book> bList = new ArrayList();
 		Book b = new Book();
 		bList = getAll();
+		int pos = -1;
+		String name = new String();	
 		try {
-			b.setTitle(in.readLine());
+			name = in.readLine();
 			System.out.println("Enter the Book Id number");
-			b.setBookId(Integer.parseInt(in.readLine()));
-			if(bList.contains(b))
+			int id =Integer.parseInt(in.readLine());
+			for(Iterator<Book> i = bList.iterator(); i.hasNext();)
 			{
+				b = i.next();
+				if(b.getBookId() == id && b.getTitle().equals(name))
+				{
+					 pos = bList.indexOf(b);
+				}
+			}
+		
+			if(pos >-1)
+			{
+			b = bList.get(pos);
 			System.out.println("Enter the new name or N/A or skip");
 			String input = in.readLine();
 			int count = 0;
@@ -137,7 +150,6 @@ public class BookService {
 				System.out.println("Nothing was updated");
 			}
 			}
-			
 		}catch(IOException e)
 		{
 			e.printStackTrace();

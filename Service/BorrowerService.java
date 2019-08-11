@@ -12,7 +12,10 @@ import java.util.List;
 
 import com.Anderson.DBLMS.Dao.BorrowerDao;
 import com.Anderson.DBLMS.Dao.Dao;
+import com.Anderson.DBLMS.Entity.Book;
 import com.Anderson.DBLMS.Entity.Borrower;
+import com.Anderson.DBLMS.Entity.LibraryBranch;
+
 
 public class BorrowerService {
 	
@@ -118,12 +121,25 @@ public class BorrowerService {
 		List<Borrower> bList = new ArrayList();
 		Borrower b = new Borrower();
 		bList = getAll();
+		int pos = -1;
+		String name = new String();
+		
 		try {
-			b.setName(in.readLine());
+			name = in.readLine();
 			System.out.println("Enter the Borrower Id number");
-			b.setCardNo(Integer.parseInt(in.readLine()));
-			if(bList.contains(b))
+			int id =Integer.parseInt(in.readLine());
+			for(Iterator<Borrower> i = bList.iterator(); i.hasNext();)
 			{
+				b = i.next();
+				if(b.getCardNo() == id && b.getName().equals(name))
+				{
+					 pos = bList.indexOf(b);
+				}
+			}
+		
+			if(pos >-1)
+			{
+			b = bList.get(pos);
 			System.out.println("Enter the new name or N/A to skip");
 			String input = in.readLine();
 			int count = 0;
@@ -162,5 +178,15 @@ public class BorrowerService {
 			e.printStackTrace();
 		}
 		
+	}
+	public void checkOut(LibraryBranch lb, Borrower br)
+	{
+		BookService bs = new BookService();
+		final List<Book> bList = bs.getAll();
+		bList.forEach((b) -> {
+			System.out.println(bList.indexOf(b) +1 +") " + b.getTitle() +" by " +b.getAuthId());
+			});
+		int count = bList.size() + 1;
+		System.out.println(count + ") Quit to previous");
 	}
 }

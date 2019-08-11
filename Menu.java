@@ -3,13 +3,28 @@ package com.Anderson.DBLMS;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
+import com.Anderson.DBLMS.Entity.Borrower;
+import com.Anderson.DBLMS.Entity.LibraryBranch;
 import com.Anderson.DBLMS.Service.AdministratorService;
+import com.Anderson.DBLMS.Service.BookLoansService;
+import com.Anderson.DBLMS.Service.BorrowerService;
+import com.Anderson.DBLMS.Service.LibrarianService;
+import com.Anderson.DBLMS.Service.LibraryBranchService;
+
 
 
 public class Menu {
 	BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 	AdministratorService as = new AdministratorService();
+	BorrowerService bs = new BorrowerService();
+	LibraryBranchService lbs = new LibraryBranchService();
+	LibrarianService ls = new LibrarianService();
+	BookLoansService bls = new BookLoansService();
 	
 	public void mainMenu()
 	{
@@ -72,12 +87,9 @@ public class Menu {
 	
 	public void libraryMenu()
 	{
-		System.out.println("1) University Library, Boston");
-		System.out.println("2) State Library, New York");
-		System.out.println("3) Federal Library, Washington DC");
-		System.out.println("4) County Library, McLean VA");
-		System.out.println("5) Quit to previous");
-		
+		final List<LibraryBranch> lbList = lbs.getAll();
+		int count = lbList.size() + 1;
+		lbs.print(lbList, count);
 		int choice = 0;
 		do {
 		try {
@@ -86,24 +98,23 @@ public class Menu {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		switch (choice)
+		if(choice < count)
 		{
-		case 1:
-		case 2:
-		case 3:
-		case 4:
-			libMenu();
-			break;
-		case 5:
-			librarianMenu();
-			break;
-			default:
-				System.out.println("The number was not between 1 and 5 enter a correct number");
+			LibraryBranch lb = new LibraryBranch();
+			lb = lbList.get(choice-1);
+			libMenu(lb);
 		}
-		}while(choice <1 || choice >5);
+		else if(choice == count)
+		{
+			librarianMenu();
+		}
+		else
+			System.out.println("The number was not between 1 and "+ count + " enter a correct number");
+		
+		}while(choice <1 || choice > count);
 	}
 	
-	 public void libMenu()
+	 public void libMenu(LibraryBranch lb)
 	 {
 		 System.out.println("1) Update the details of the Library");
 		 System.out.println("2) Add copies of Book to the Branch");
@@ -119,8 +130,10 @@ public class Menu {
 			switch (choice)
 			{
 			case 1:
+				lbs.Update(lb);
 				break;
 			case 2:
+				ls.addCopies();
 				break;
 			case 3:
 				libraryMenu();
@@ -163,6 +176,7 @@ public class Menu {
 					updateMenu();
 					break;
 				case 5:
+					as.OverrideDueDate();
 					break;
 				case 6:
 					mainMenu();
@@ -342,14 +356,30 @@ public class Menu {
 	 {
 		 System.out.print("Enter your card number: ");
 		 int id = 0;
+		 List<Borrower> bList =bs.getAll();
+		 Borrower b = new Borrower();
+		 int pos = -1;
 		 do {
 		 try {
 			 id = Integer.parseInt(in.readLine());
+			 for(Iterator<Borrower> i = bList.iterator(); i.hasNext();)
+				{
+					b = i.next();
+					if(b.getCardNo() == id)
+					{
+						 pos = bList.indexOf(b);
+					}
+				}
+			 if(pos == -1)
+			 {
+				 System.out.println("Card Number not found enter a valid one");
+			 }
+			b = bList.get(pos);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		 }while(id <1 || id >1000000);
+		 }while(pos == -1);
 		 
 		 System.out.println("1) Check out a book");
 		 System.out.println("2) Return a book");
@@ -365,6 +395,7 @@ public class Menu {
 				switch (choice)
 				{
 				case 1:
+					checkOutMenu(b);
 					break;
 				case 2:
 					break;
@@ -377,5 +408,45 @@ public class Menu {
 				}while(choice <1 || choice >3);
 		 
 	 }
+	public void checkOutMenu(Borrower b) {
+		System.out.println("Pick the branch you want to check out from");
+		final List<LibraryBranch> lbList = lbs.getAll();
+		int count = lbList.size() + 1;
+		lbs.print(lbList, count);
+		int choice = 0;
+		do {
+		try {
+			choice = Integer.parseInt(in.readLine());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(choice < count)
+		{
+			LibraryBranch lb = new LibraryBranch();
+			lb = lbList.get(choice-1);
+			try {
+				bls.checkOut(lb, b);
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else if(choice == count)
+		{
+			borrowerMenu();
+		}
+		else
+			System.out.println("The number was not between 1 and "+ count + " enter a correct number");
+		
+		}while(choice <1 || choice > count);
 	}
+		
+}
 

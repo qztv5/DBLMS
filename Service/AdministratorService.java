@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.ResultSet;
+import java.text.ParseException;
 
 
 
@@ -16,6 +17,7 @@ public class AdministratorService {
 	BookService bs = new BookService();
 	LibraryBranchService lbs = new LibraryBranchService();
 	BorrowerService brs = new BorrowerService();
+	BookLoansService bls = new BookLoansService();
 	
 	public void addBook()
 	{
@@ -124,7 +126,12 @@ public class AdministratorService {
 	}
 	public void OverrideDueDate()
 	{
-		
+		try {
+			bls.Update();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

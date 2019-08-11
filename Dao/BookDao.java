@@ -12,7 +12,7 @@ import com.Anderson.DBLMS.Entity.Book;
 public class BookDao extends Dao {
 	
 	Connection conn = getConnection();
-	ResultSet author = null;
+	ResultSet book = null;
 	PreparedStatement prepareStatement = null;
 	BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 	
@@ -22,11 +22,11 @@ public class BookDao extends Dao {
 		String sql = "Select * From library.tbl_book";
 		try {
 			prepareStatement = conn.prepareStatement(sql);
-			author = prepareStatement.executeQuery();
+			book = prepareStatement.executeQuery();
 		} catch (SQLException e) {
 			System.out.println("Could not retrieve books");
 		}
-		return author;
+		return book;
 	}
 	
 	public void add(Book b) throws SQLException
