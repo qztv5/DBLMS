@@ -4,9 +4,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import com.Anderson.DBLMS.Service.AdministratorService;
+
 
 public class Menu {
 	BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+	AdministratorService as = new AdministratorService();
 	
 	public void mainMenu()
 	{
@@ -190,14 +193,19 @@ public class Menu {
 				switch (choice)
 				{
 				case 1:
+					as.addBook();
 					break;
 				case 2:
+					as.addAuthor();
 					break;
 				case 3:
+					as.addPublisher();
 					break;
 				case 4:
+					as.addLibraryBranch();
 					break;
 				case 5:
+					as.addBorrower();
 					break;
 				case 6:
 					adminMenu();
@@ -226,14 +234,19 @@ public class Menu {
 				switch (choice)
 				{
 				case 1:
+					as.updateBook();
 					break;
 				case 2:
+					as.updateAuthor();
 					break;
 				case 3:
+					as.updatePublisher();
 					break;
 				case 4:
+					as.updateLibraryBrach();
 					break;
 				case 5:
+					as.updateBorrower();
 					break;
 				case 6:
 					adminMenu();
@@ -262,14 +275,19 @@ public class Menu {
 				switch (choice)
 				{
 				case 1:
+					as.deleteBook();
 					break;
 				case 2:
+					as.deleteAuthor();
 					break;
 				case 3:
+					as.deletePublisher();
 					break;
 				case 4:
+					as.deleteLibraryBranch();
 					break;
 				case 5:
+					as.deleteBorrower();
 					break;
 				case 6:
 					adminMenu();
@@ -298,14 +316,19 @@ public class Menu {
 				switch (choice)
 				{
 				case 1:
+					as.getBook();
 					break;
 				case 2:
+					as.getAuthor();
 					break;
 				case 3:
+					as.getPublisher();
 					break;
 				case 4:
+					as.getLibraryBranch();
 					break;
 				case 5:
+					as.getBorrower();
 					break;
 				case 6:
 					adminMenu();
