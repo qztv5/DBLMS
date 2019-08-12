@@ -9,9 +9,6 @@ public class Dao {
 	public static Connection getConnection()
 	{
 		Connection conn = null;
-		
-		
-		
 		try {
 			conn = ((Connection)DriverManager.getConnection("jdbc:mysql://localhost:3306/library?useSSL=false&serverTimezpme=UTC", "root", "root")) ;
 		} catch(SQLException e)
