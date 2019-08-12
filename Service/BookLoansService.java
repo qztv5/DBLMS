@@ -139,11 +139,27 @@ public class BookLoansService {
 			
 			System.out.println(count + ") Quit to previous");
 			do {
+				int pos = -1;
 				choice = Integer.parseInt(in.readLine());
 				if(choice < count)
 				{
+					List<BookLoans> blList = getAll();
 					BookLoans bl = new BookLoans();
 					books.absolute(choice);
+					for(Iterator<BookLoans> i = blList.iterator(); i.hasNext();)
+					{
+						bl = i.next();
+						if(bl.getBranchId() == lb.getBranchId() && bl.getBookId() == books.getInt(3) && bl.getCardNo() == br.getCardNo())
+						{
+							 pos = blList.indexOf(bl);
+						}
+					}
+					if(pos != -1)
+					{
+						System.out.println("You already have that book from that library");
+					}
+					else
+					{
 					bl.setBookId(books.getInt(3));
 					bl.setBranchId(lb.getBranchId());
 					bl.setCardNo(br.getCardNo());
@@ -154,6 +170,7 @@ public class BookLoansService {
 					Date due = java.sql.Date.valueOf(dueDate);
 					bl.setDueDate(due);
 					blDao.add(bl);
+					}
 					
 				}
 				else if(choice == count)
@@ -208,8 +225,15 @@ public class BookLoansService {
 						 pos = blList.indexOf(bl);
 					}
 				}
+				if(pos !=-1)
+				{
 				bl = blList.get(pos);
 				blDao.remove(bl);
+				}
+				else 
+				{
+					System.out.println("No book to return at this library");
+				}
 				
 			}
 			else if(choice == count)

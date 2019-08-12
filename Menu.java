@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -342,18 +341,23 @@ public class Menu {
 				{
 				case 1:
 					as.getBook();
+					adminMenu();
 					break;
 				case 2:
 					as.getAuthor();
+					adminMenu();
 					break;
 				case 3:
 					as.getPublisher();
+					adminMenu();
 					break;
 				case 4:
 					as.getLibraryBranch();
+					adminMenu();
 					break;
 				case 5:
 					as.getBorrower();
+					adminMenu();
 					break;
 				case 6:
 					adminMenu();
@@ -385,10 +389,11 @@ public class Menu {
 			 {
 				 System.out.println("Card Number not found enter a valid one");
 			 }
-			b = bList.get(pos);
+			 else{
+				 b = bList.get(pos);
+			 }
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Invalid input or output");
 		}
 		 }while(pos == -1);
 		 
@@ -439,6 +444,7 @@ public class Menu {
 			lb = lbList.get(choice-1);
 			try {
 				bls.returnBook(b, lb);
+				returnMenu(b);
 			} catch (NumberFormatException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -479,6 +485,7 @@ public class Menu {
 			lb = lbList.get(choice-1);
 			try {
 				bls.checkOut(lb, b);
+				checkOutMenu(b);
 			} catch (NumberFormatException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
