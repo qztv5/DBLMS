@@ -179,14 +179,4 @@ public class BorrowerService {
 		}
 		
 	}
-	public void checkOut(LibraryBranch lb, Borrower br)
-	{
-		BookService bs = new BookService();
-		final List<Book> bList = bs.getAll();
-		bList.forEach((b) -> {
-			System.out.println(bList.indexOf(b) +1 +") " + b.getTitle() +" by " +b.getAuthId());
-			});
-		int count = bList.size() + 1;
-		System.out.println(count + ") Quit to previous");
-	}
 }

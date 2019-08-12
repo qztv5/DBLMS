@@ -133,7 +133,18 @@ public class Menu {
 				lbs.Update(lb);
 				break;
 			case 2:
-				ls.addCopies();
+				try {
+					ls.addCopies(lb);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NumberFormatException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				break;
 			case 3:
 				libraryMenu();
@@ -398,6 +409,7 @@ public class Menu {
 					checkOutMenu(b);
 					break;
 				case 2:
+					returnMenu(b);
 					break;
 				case 3:
 					mainMenu();
@@ -408,6 +420,46 @@ public class Menu {
 				}while(choice <1 || choice >3);
 		 
 	 }
+	public void returnMenu(Borrower b) {
+		System.out.println("Pick the branch you want to return a book to");
+		final List<LibraryBranch> lbList = lbs.getAll();
+		int count = lbList.size() + 1;
+		lbs.print(lbList, count);
+		int choice = 0;
+		do {
+		try {
+			choice = Integer.parseInt(in.readLine());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(choice < count)
+		{
+			LibraryBranch lb = new LibraryBranch();
+			lb = lbList.get(choice-1);
+			try {
+				bls.returnBook(b, lb);
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else if(choice == count)
+		{
+			borrowerMenu();
+		}
+		else
+			System.out.println("The number was not between 1 and "+ count + " enter a correct number");
+		
+		}while(choice <1 || choice > count);
+		
+	}
 	public void checkOutMenu(Borrower b) {
 		System.out.println("Pick the branch you want to check out from");
 		final List<LibraryBranch> lbList = lbs.getAll();

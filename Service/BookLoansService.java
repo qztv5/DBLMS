@@ -21,6 +21,7 @@ import com.Anderson.DBLMS.Menu;
 import com.Anderson.DBLMS.Dao.BookLoansDao;
 import com.Anderson.DBLMS.Dao.Dao;
 import com.Anderson.DBLMS.Entity.Book;
+import com.Anderson.DBLMS.Entity.BookCopy;
 import com.Anderson.DBLMS.Entity.BookLoans;
 import com.Anderson.DBLMS.Entity.Borrower;
 import com.Anderson.DBLMS.Entity.LibraryBranch;
@@ -141,7 +142,6 @@ public class BookLoansService {
 				choice = Integer.parseInt(in.readLine());
 				if(choice < count)
 				{
-					System.out.println("In checkout");
 					BookLoans bl = new BookLoans();
 					books.absolute(choice);
 					bl.setBookId(books.getInt(3));
@@ -164,9 +164,62 @@ public class BookLoansService {
 				else
 					System.out.println("The number was not between 1 and "+ count + " enter a correct number");
 			}while(choice < 1 || choice > count);
-	
-		
 	}
 	
+	public void returnBook(Borrower br, LibraryBranch lb) throws SQLException, NumberFormatException, IOException
+	{
+		Connection conn = Dao.getConnection();
+		ResultSet books = null;
+		PreparedStatement prepareStatement = null;
+		String sql = "Select bk.title, au.authorName, bk.bookId\r\n" + 
+				"From library.tbl_book as bk\r\n" + 
+				"inner Join library.tbl_author as au on bk.authId = au.authorId\r\n" + 
+				"Where bk.bookId = Any \r\n" +
+				"(Select bl.bookId\r\n" + 
+						"FROM library.tbl_book_loans as bl\r\n" +
+						"Where bl.branchId = ? and bl.cardNo =?)";
+		int choice = 0;
+		prepareStatement = conn.prepareStatement(sql);
+		prepareStatement.setInt(1, lb.getBranchId());
+		prepareStatement.setInt(2, br.getCardNo());
+		books = prepareStatement.executeQuery();
+		int count = 1;
+		while(books.next())
+		{
+			
+			System.out.println(count + ") " + books.getString(1) + " by " + books.getString(2));
+			count++;
+		}
+		System.out.println(count + ") Quit to previous");
+		do {
+			choice = Integer.parseInt(in.readLine());
+			if(choice < count)
+			{
+				books.absolute(choice);
+				int pos = -1;
+				List<BookLoans> blList = new ArrayList();
+				BookLoans bl = new BookLoans();
+				blList = getAll();
+				for(Iterator<BookLoans> i = blList.iterator(); i.hasNext();)
+				{
+					bl = i.next();
+					if(bl.getBranchId() == lb.getBranchId() && bl.getBookId() == books.getInt(3)  && bl.getCardNo() == br.getCardNo())
+					{
+						 pos = blList.indexOf(bl);
+					}
+				}
+				bl = blList.get(pos);
+				blDao.remove(bl);
+				
+			}
+			else if(choice == count)
+			{
+				Menu borrower = new Menu();
+				borrower.borrowerMenu();
+			}
+			else
+				System.out.println("The number was not between 1 and "+ count + " enter a correct number");
+		}while(choice < 1 || choice > count);
+	}
 }
 
