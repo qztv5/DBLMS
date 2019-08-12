@@ -12,9 +12,8 @@ import java.util.List;
 
 import com.Anderson.DBLMS.Dao.BorrowerDao;
 import com.Anderson.DBLMS.Dao.Dao;
-import com.Anderson.DBLMS.Entity.Book;
 import com.Anderson.DBLMS.Entity.Borrower;
-import com.Anderson.DBLMS.Entity.LibraryBranch;
+
 
 
 public class BorrowerService {
@@ -41,13 +40,11 @@ public class BorrowerService {
 					temp.setPhone(result.getString(4));
 					bList.add(temp);
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println("There was an error reading from the database");
 				}
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("There was an error reading from the database");
 		}
 		return bList;
 	}
@@ -58,18 +55,25 @@ public class BorrowerService {
 		try {
 			b.setName(in.readLine());
 			System.out.println("Enter the Id number");
+			do {
+				b.setCardNo(0);
+				try
+				{
 			b.setCardNo(Integer.parseInt(in.readLine()));
+				}  catch (NumberFormatException e) {
+					System.out.println("Please enter an int");
+				}
+			}while(b.getCardNo() ==0);
 			System.out.println("Enter the address");
 			b.setAddress(in.readLine());
 			System.out.println("Enter the phone number");
 			b.setPhone(in.readLine());
 			bDao.add(b);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			System.out.println("There was an input or output error");
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("There was an error writing to the database");
 		}
 	}
 
@@ -80,25 +84,35 @@ public class BorrowerService {
 		try {
 			b.setName(in.readLine());
 			System.out.println("Enter the Borrower Id number");
+			do {
+				b.setCardNo(0);
+				try
+				{
 			b.setCardNo(Integer.parseInt(in.readLine()));
+				}  catch (NumberFormatException e) {
+					System.out.println("Please enter an int");
+				}
+			}while(b.getCardNo() ==0);
 			bDao.remove(b);
 		}catch(IOException e)
 		{
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("There was an error writing to the database");
 		}
 		
 	
 	}
 
 
-	public void Retrieve() throws IOException {
+	public void Retrieve(){
 		System.out.println("Enter the Borrower Name to retreive a specific author");
 		System.out.println("Enter all to retreive all authors");
 		List<Borrower> bList = getAll();
-		String input = in.readLine();
+		String input;
+		try {
+			input = in.readLine();
+	
 			if(input.equalsIgnoreCase("all"))
 			{
 				bList.forEach(System.out::println);
@@ -114,6 +128,9 @@ public class BorrowerService {
 				}
 
 			}	
+			} catch (IOException e) {
+				System.out.println("There was an input or output error");
+			}
 		}
 
 	public void Update() {
@@ -127,7 +144,15 @@ public class BorrowerService {
 		try {
 			name = in.readLine();
 			System.out.println("Enter the Borrower Id number");
-			int id =Integer.parseInt(in.readLine());
+			int id = 0;
+			do {
+				try
+				{
+					id =Integer.parseInt(in.readLine());
+				}  catch (NumberFormatException e) {
+					System.out.println("Please enter an int");
+				}
+			}while(id == 0);
 			for(Iterator<Borrower> i = bList.iterator(); i.hasNext();)
 			{
 				b = i.next();
@@ -174,8 +199,7 @@ public class BorrowerService {
 		{
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("There was an error writing to the database");
 		}
 		
 	}

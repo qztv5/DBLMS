@@ -13,6 +13,7 @@ import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -47,29 +48,55 @@ public class BookLoansService {
 					temp.setDueDate(result.getDate(5));
 					blList.add(temp);
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println("There was an error reading from the database");
 				}
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("There was an error reading from the database");
 		}
 		return blList;
 	}
 	
-	public void Update() throws ParseException {
-		System.out.println("Enter the Book Id number");
+	public void Update() {
 		List<BookLoans> blList = new ArrayList();
 		BookLoans bl = new BookLoans();
 		blList = getAll();
 		int pos = -1;	
-		try {
-			int bkId = Integer.parseInt(in.readLine());
-			System.out.println("Enter the Branch Id number");
-			int brId = Integer.parseInt(in.readLine());
+		
+			int bkId =0;
+			int brId =0;
+			int card =0;
+			do {
+				try {
+				System.out.println("Enter the Book Id number");
+				bkId = Integer.parseInt(in.readLine());
+				}  catch (NumberFormatException e) {
+					System.out.println("Please enter an int");
+				} catch (IOException e) {
+					System.out.println("There was an input or output error");
+				}
+			}while(bkId ==0);
+			do{
+				try {
+				System.out.println("Enter the Branch Id number");
+				brId = Integer.parseInt(in.readLine());
+				}  catch (NumberFormatException e) {
+					System.out.println("Please enter an int");
+				} catch (IOException e) {
+					System.out.println("There was an input or output error");
+				}
+			}while(brId==0);
+			
+			do {
+				try {
 			System.out.println("Enter the card number");
-			int card = Integer.parseInt(in.readLine());
+			card = Integer.parseInt(in.readLine());
+			}  catch (NumberFormatException e) {
+				System.out.println("Please enter an int");
+			} catch (IOException e) {
+				System.out.println("There was an input or output error");
+			}
+			}while(card ==0);
 			for(Iterator<BookLoans> i = blList.iterator(); i.hasNext();)
 			{
 				bl = i.next();
@@ -82,34 +109,47 @@ public class BookLoansService {
 			if(pos >-1)
 			{
 			bl = blList.get(pos);
-			System.out.println("Enter the new due date as yyyy-mm-dd or N/A or skip");
-			String input = in.readLine();
-			
+			LocalDate ldate =null;
+			Date date = null;
+			String input = "";
 			int count = 0;
+			do {
+			try {
+			System.out.println("Enter the new due date as yyyy-mm-dd or N/A or skip");
+			
+				input = in.readLine();
+			} catch (IOException e) {
+				System.out.println("There was an input or output error");
+			}
 			if(!input.equalsIgnoreCase("N/A"))
 			{
-				LocalDate ldate = LocalDate.parse(input);
-				Date date = java.sql.Date.valueOf(ldate);
+				try {
+				ldate = LocalDate.parse(input);
+				date = java.sql.Date.valueOf(ldate);
 				bl.setDueDate(date);
 				count++;
+				} catch(DateTimeParseException e)
+				{
+					System.out.println("Date format not correct");
+				}
+				
 			}
+			}while(ldate==null && !input.equalsIgnoreCase("N/A"));
 			if(count >0)
-			blDao.update(bl);
+				try {
+					blDao.update(bl);
+				} catch (SQLException e) {
+					System.out.println("Error updating the database");
+				}
 			else
 			{
 				System.out.println("Nothing was updated");
 			}
+			
 			}
-		}catch(IOException e)
-		{
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
 	}
 	
-	public void checkOut(LibraryBranch lb, Borrower br) throws SQLException, NumberFormatException, IOException
+	public void checkOut(LibraryBranch lb, Borrower br)
 	{
 		Connection conn = Dao.getConnection();
 		ResultSet books = null;
@@ -124,11 +164,16 @@ public class BookLoansService {
 		int choice = 0;
 		
 		
-			prepareStatement = conn.prepareStatement(sql);
+			try {
+				prepareStatement = conn.prepareStatement(sql);
 			prepareStatement.setInt(1, lb.getBranchId());
 			books = prepareStatement.executeQuery();
-			String test = books.toString();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			int count = 1;
+			try {
 			while(books.next())
 			{
 				
@@ -136,15 +181,30 @@ public class BookLoansService {
 				count++;
 				
 			}
-			
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			System.out.println(count + ") Quit to previous");
+			int pos = -1;
+			List<BookLoans> blList = getAll();
+			BookLoans bl = new BookLoans();
 			do {
-				int pos = -1;
+				
+				try {
 				choice = Integer.parseInt(in.readLine());
+				} catch (NumberFormatException e) {
+					System.out.println("Please enter an int");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}while(choice ==0);
+			do {
+				try {
 				if(choice < count)
 				{
-					List<BookLoans> blList = getAll();
-					BookLoans bl = new BookLoans();
+					
 					books.absolute(choice);
 					for(Iterator<BookLoans> i = blList.iterator(); i.hasNext();)
 					{
@@ -154,6 +214,7 @@ public class BookLoansService {
 							 pos = blList.indexOf(bl);
 						}
 					}
+					
 					if(pos != -1)
 					{
 						System.out.println("You already have that book from that library");
@@ -173,6 +234,7 @@ public class BookLoansService {
 					}
 					
 				}
+				
 				else if(choice == count)
 				{
 					Menu borrower = new Menu();
@@ -180,10 +242,14 @@ public class BookLoansService {
 				}
 				else
 					System.out.println("The number was not between 1 and "+ count + " enter a correct number");
+				} catch (SQLException e) {
+					System.out.println("Error writing to the database");
+				}
+				
 			}while(choice < 1 || choice > count);
 	}
 	
-	public void returnBook(Borrower br, LibraryBranch lb) throws SQLException, NumberFormatException, IOException
+	public void returnBook(Borrower br, LibraryBranch lb)
 	{
 		Connection conn = Dao.getConnection();
 		ResultSet books = null;
@@ -196,11 +262,15 @@ public class BookLoansService {
 						"FROM library.tbl_book_loans as bl\r\n" +
 						"Where bl.branchId = ? and bl.cardNo =?)";
 		int choice = 0;
-		prepareStatement = conn.prepareStatement(sql);
-		prepareStatement.setInt(1, lb.getBranchId());
-		prepareStatement.setInt(2, br.getCardNo());
-		books = prepareStatement.executeQuery();
 		int count = 1;
+		try {
+			prepareStatement = conn.prepareStatement(sql);
+			prepareStatement.setInt(1, lb.getBranchId());
+			prepareStatement.setInt(2, br.getCardNo());
+			books = prepareStatement.executeQuery();
+		
+		
+		
 		while(books.next())
 		{
 			
@@ -208,27 +278,44 @@ public class BookLoansService {
 			count++;
 		}
 		System.out.println(count + ") Quit to previous");
+		} catch (SQLException e) {
+			
+		}
 		do {
-			choice = Integer.parseInt(in.readLine());
+			try {
+				choice = Integer.parseInt(in.readLine());
+			} catch (NumberFormatException | IOException e) {
+				System.out.println("Please enter an int");
+			}
+		}while(choice==0);
+		do {
 			if(choice < count)
 			{
-				books.absolute(choice);
 				int pos = -1;
 				List<BookLoans> blList = new ArrayList();
 				BookLoans bl = new BookLoans();
-				blList = getAll();
-				for(Iterator<BookLoans> i = blList.iterator(); i.hasNext();)
-				{
+				try {
+					books.absolute(choice);
+					blList = getAll();
+					for(Iterator<BookLoans> i = blList.iterator(); i.hasNext();)
+					{
 					bl = i.next();
 					if(bl.getBranchId() == lb.getBranchId() && bl.getBookId() == books.getInt(3)  && bl.getCardNo() == br.getCardNo())
 					{
 						 pos = blList.indexOf(bl);
 					}
 				}
+				} catch (SQLException e) {
+					System.out.println("There was an error with the sql command");
+				}
 				if(pos !=-1)
 				{
 				bl = blList.get(pos);
-				blDao.remove(bl);
+				try {
+					blDao.remove(bl);
+				} catch (SQLException e) {
+					System.out.println("Error remvoing " + bl + "from the database");
+				}
 				}
 				else 
 				{

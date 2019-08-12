@@ -3,7 +3,6 @@ package com.Anderson.DBLMS;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -37,8 +36,11 @@ public class Menu {
 			try {
 				choice = Integer.parseInt(in.readLine());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("Error with input or output");
+			}catch (NumberFormatException e)
+			{
+				System.out.println("You did not enter an integer");
+				mainMenu();
 			}
 			
 				switch (choice)
@@ -67,8 +69,11 @@ public class Menu {
 		try {
 			choice = Integer.parseInt(in.readLine());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Error with input or output");
+		}catch (NumberFormatException e)
+		{
+			System.out.println("You did not enter an integer");
+			librarianMenu();
 		}
 		switch (choice)
 		{
@@ -93,10 +98,11 @@ public class Menu {
 		do {
 		try {
 			choice = Integer.parseInt(in.readLine());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (NumberFormatException | IOException e) {
+			System.out.println("Please enter an int");
 		}
+		}while(choice == 0);
+		do {
 		if(choice < count)
 		{
 			LibraryBranch lb = new LibraryBranch();
@@ -123,8 +129,11 @@ public class Menu {
 			try {
 				choice = Integer.parseInt(in.readLine());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("Error with input or output");
+			}catch (NumberFormatException e)
+			{
+				System.out.println("You did not enter an integer");
+				libMenu(lb);
 			}
 			switch (choice)
 			{
@@ -132,18 +141,7 @@ public class Menu {
 				lbs.Update(lb);
 				break;
 			case 2:
-				try {
-					ls.addCopies(lb);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (NumberFormatException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				ls.addCopies(lb);
 				break;
 			case 3:
 				libraryMenu();
@@ -168,8 +166,11 @@ public class Menu {
 				try {
 					choice = Integer.parseInt(in.readLine());
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println("Error with input or output");
+				}catch (NumberFormatException e)
+				{
+					System.out.println("You did not enter an integer");
+					adminMenu();
 				}
 				switch (choice)
 				{
@@ -187,6 +188,7 @@ public class Menu {
 					break;
 				case 5:
 					as.OverrideDueDate();
+					adminMenu();
 					break;
 				case 6:
 					mainMenu();
@@ -211,8 +213,11 @@ public class Menu {
 				try {
 					choice = Integer.parseInt(in.readLine());
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println("Error with input or output");
+				}catch (NumberFormatException e)
+				{
+					System.out.println("You did not enter an integer");
+					addMenu();
 				}
 				switch (choice)
 				{
@@ -252,8 +257,11 @@ public class Menu {
 				try {
 					choice = Integer.parseInt(in.readLine());
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println("Error with input or output");
+				}catch (NumberFormatException e)
+				{
+					System.out.println("You did not enter an integer");
+					updateMenu();
 				}
 				switch (choice)
 				{
@@ -293,8 +301,11 @@ public class Menu {
 				try {
 					choice = Integer.parseInt(in.readLine());
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println("Error with input or output");
+				}catch (NumberFormatException e)
+				{
+					System.out.println("You did not enter an integer");
+					deleteMenu();
 				}
 				switch (choice)
 				{
@@ -334,8 +345,11 @@ public class Menu {
 				try {
 					choice = Integer.parseInt(in.readLine());
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println("Error with input or output");
+				}catch (NumberFormatException e)
+				{
+					System.out.println("You did not enter an integer");
+					retrieveMenu();
 				}
 				switch (choice)
 				{
@@ -396,18 +410,22 @@ public class Menu {
 			System.out.println("Invalid input or output");
 		}
 		 }while(pos == -1);
-		 
+		 int choice = 0;
+		 do {
 		 System.out.println("1) Check out a book");
 		 System.out.println("2) Return a book");
 		 System.out.println("3) Quit to previous");
-		 int choice = 0;
-		 do {
+		 
 				try {
 					choice = Integer.parseInt(in.readLine());
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println("Error with input or output");
+				}catch (NumberFormatException e)
+				{
+					System.out.println("You did not enter an integer");
 				}
+		 }while(choice ==0);
+		 do {
 				switch (choice)
 				{
 				case 1:
@@ -422,6 +440,7 @@ public class Menu {
 					default:
 						System.out.println("The number was not between 1 and 3 enter a correct number");
 				}
+				
 				}while(choice <1 || choice >3);
 		 
 	 }
@@ -435,26 +454,19 @@ public class Menu {
 		try {
 			choice = Integer.parseInt(in.readLine());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Error with input or output");
+		}catch (NumberFormatException e)
+		{
+			System.out.println("You did not enter an integer");
 		}
+		}while(choice ==0);
+		do {
 		if(choice < count)
 		{
 			LibraryBranch lb = new LibraryBranch();
 			lb = lbList.get(choice-1);
-			try {
 				bls.returnBook(b, lb);
 				returnMenu(b);
-			} catch (NumberFormatException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 		else if(choice == count)
 		{
@@ -476,26 +488,16 @@ public class Menu {
 		try {
 			choice = Integer.parseInt(in.readLine());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Please enter an int");
 		}
+		}while(choice ==0);
+		do {
 		if(choice < count)
 		{
 			LibraryBranch lb = new LibraryBranch();
 			lb = lbList.get(choice-1);
-			try {
 				bls.checkOut(lb, b);
 				checkOutMenu(b);
-			} catch (NumberFormatException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 		else if(choice == count)
 		{

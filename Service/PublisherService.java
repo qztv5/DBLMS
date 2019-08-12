@@ -38,13 +38,11 @@ public class PublisherService {
 					temp.setPublisherPhone(result.getString(4));
 					pList.add(temp);
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println("There was an error reading from the database");
 				}
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("There was an error reading from the database");
 		}
 		return pList;
 	}
@@ -55,7 +53,14 @@ public class PublisherService {
 		try {
 			p.setPublisherName(in.readLine());
 			System.out.println("Enter the Id number");
-			p.setPublisherId(Integer.parseInt(in.readLine()));
+			p.setPublisherId(0);
+			do {
+				try {
+					p.setPublisherId(Integer.parseInt(in.readLine()));
+				}  catch (NumberFormatException e) {
+					System.out.println("Please enter an int");
+				}
+			}while(p.getPublisherId()==0);
 			System.out.println("Enter the address");
 			p.setPublisherAddress(in.readLine());
 			System.out.println("Enter the phone number as xxx-xxx-xxxx");
@@ -77,13 +82,19 @@ public class PublisherService {
 		try {
 			p.setPublisherName(in.readLine());
 			System.out.println("Enter the Publisher Id number");
-			p.setPublisherId(Integer.parseInt(in.readLine()));
+			p.setPublisherId(0);
+			do {
+				try {
+					p.setPublisherId(Integer.parseInt(in.readLine()));
+				}  catch (NumberFormatException e) {
+					System.out.println("Please enter an int");
+				}
+			}while(p.getPublisherId()==0);
 			pDao.remove(p);
 		}catch(IOException e)
 		{
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -91,11 +102,13 @@ public class PublisherService {
 	}
 
 
-	public void Retrieve() throws IOException {
+	public void Retrieve() {
 		System.out.println("Enter the Publisher Name to retreive a specific author");
 		System.out.println("Enter all to retreive all authors");
 		List<Publisher> pList = getAll();
-		String input = in.readLine();
+		String input;
+		try {
+			input = in.readLine();
 			if(input.equalsIgnoreCase("all"))
 			{
 				pList.forEach(System.out::println);
@@ -109,8 +122,11 @@ public class PublisherService {
 					System.out.println(p);
 					return;
 				}
-
-			}	
+			}
+			} catch (IOException e) {
+				System.out.println("There was an input or output error");
+			}
+	
 		}
 
 	public void Update() {
@@ -121,7 +137,14 @@ public class PublisherService {
 		try {
 			p.setPublisherName(in.readLine());
 			System.out.println("Enter the Id number");
-			p.setPublisherId(Integer.parseInt(in.readLine()));
+			p.setPublisherId(0);
+			do {
+				try {
+					p.setPublisherId(Integer.parseInt(in.readLine()));
+				}  catch (NumberFormatException e) {
+					System.out.println("Please enter an int");
+				}
+			}while(p.getPublisherId() ==0);
 			System.out.println("Enter the address");
 			p.setPublisherAddress(in.readLine());
 			System.out.println("Enter the phone number as xxx-xxx-xxxx");
@@ -161,10 +184,9 @@ public class PublisherService {
 			}
 		}catch(IOException e)
 		{
-			e.printStackTrace();
+			System.out.println("There was an input or output error");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("There was an error writing to the database");
 		}
 		
 	}

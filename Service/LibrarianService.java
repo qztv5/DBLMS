@@ -14,9 +14,7 @@ import java.util.List;
 import com.Anderson.DBLMS.Menu;
 import com.Anderson.DBLMS.Dao.BookCopiesDao;
 import com.Anderson.DBLMS.Dao.Dao;
-import com.Anderson.DBLMS.Entity.Book;
 import com.Anderson.DBLMS.Entity.BookCopy;
-import com.Anderson.DBLMS.Entity.BookLoans;
 import com.Anderson.DBLMS.Entity.LibraryBranch;
 
 public class LibrarianService {
@@ -24,7 +22,7 @@ public class LibrarianService {
 	BookCopyService bcs = new BookCopyService();
 	BookCopiesDao bcDao = new BookCopiesDao();
 	
-	public void addCopies(LibraryBranch lb) throws SQLException, NumberFormatException, IOException
+	public void addCopies(LibraryBranch lb)
 	{
 		Connection conn = Dao.getConnection();
 		ResultSet books = null;
@@ -33,24 +31,40 @@ public class LibrarianService {
 				"From library.tbl_book as bk\r\n" + 
 				"inner Join library.tbl_author as au on bk.authId = au.authorId\r\n";
 		int choice = 0;
-		prepareStatement = conn.prepareStatement(sql);
-		books = prepareStatement.executeQuery();
 		int count = 1;
+		try {
+			prepareStatement = conn.prepareStatement(sql);
+		
+		books = prepareStatement.executeQuery();
+		
 		while(books.next())
 		{	
 			System.out.println(count + ") " + books.getString(1) + " by " + books.getString(2));
 			count++;
 		}
+		} catch (SQLException e) {
+			System.out.println("There was an error acesssing the database");
+		}
 		System.out.println(count + ") Quit to previous");
 		do {
-			choice = Integer.parseInt(in.readLine());
+			try {
+				choice = Integer.parseInt(in.readLine());
+			} catch (NumberFormatException e) {
+				System.out.println("Please enter an int");
+			} catch (IOException e) {
+				System.out.println("There was an input or output error");
+
+			}
+		}while(choice ==0);
+		do {
 			if(choice < count)
 			{
-				books.absolute(choice);
 				int pos = -1;
 				List<BookCopy> bcList = new ArrayList();
 				BookCopy bc = new BookCopy();
-				bcList = bcs.getAll();
+				try {
+					books.absolute(choice);
+					bcList = bcs.getAll();
 				for(Iterator<BookCopy> i = bcList.iterator(); i.hasNext();)
 				{
 					bc = i.next();
@@ -59,26 +73,60 @@ public class LibrarianService {
 						 pos = bcList.indexOf(bc);
 					}
 				}
+				} catch (SQLException e1) {
+					System.out.println("There was a database error");
+				}
 				if(pos != -1)
 				{
 				bc = bcList.get(pos);
 				System.out.println("Existing number of copies: " + bc.getNoOfCopies());
 				System.out.print("Enter new number of copies: ");
-				int copies = Integer.parseInt(in.readLine());
+				int copies = 0;
+				do {
+				try {
+				copies = Integer.parseInt(in.readLine());
 				bc.setNoOfCopies(copies);
-				bcDao.update(bc);
+				} catch (NumberFormatException e) {
+					System.out.println("Please enter an int");
+				} catch (IOException e) {
+					System.out.println("There was an input or output error");
+
+				}
+				}while(copies == 0);
+				
+				try {
+					bcDao.update(bc);
+				} catch (SQLException e) {
+					System.out.println("Error writing to the database");
+				}
 				Menu libMenu = new Menu();
 				libMenu.libMenu(lb);
 				}
 				else
 				{
 					System.out.println("Existing number of copies: 0");
-					bc.setBookId(books.getInt(3));
+					int copies =0;
+					do {
+					try {
+						bc.setBookId(books.getInt(3));
+					} catch (SQLException e) {
+						System.out.println("Error reading from the database");
+					}
 					bc.setBranchId(lb.getBranchId());
 					System.out.print("Enter new number of copies: ");
-					int copies = Integer.parseInt(in.readLine());
+					
+					try {
+						copies = Integer.parseInt(in.readLine());
+					} catch (NumberFormatException | IOException e) {
+						System.out.println("Please enter an int");
+					}
+					}while(copies == 0);
 					bc.setNoOfCopies(copies);
-					bcDao.add(bc);
+					try {
+						bcDao.add(bc);
+					} catch (SQLException e) {
+						System.out.println("Error writing to the database");
+					}
 					Menu libMenu = new Menu();
 					libMenu.libMenu(lb);
 				}

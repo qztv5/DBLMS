@@ -13,7 +13,6 @@ import java.util.List;
 import com.Anderson.DBLMS.Dao.LibraryBranchDao;
 import com.Anderson.DBLMS.Menu;
 import com.Anderson.DBLMS.Dao.Dao;
-import com.Anderson.DBLMS.Entity.Borrower;
 import com.Anderson.DBLMS.Entity.LibraryBranch;
 
 public class LibraryBranchService {
@@ -57,7 +56,14 @@ public class LibraryBranchService {
 		try {
 			lb.setBranchName(in.readLine());
 			System.out.println("Enter the Library Branch Id number");
-			lb.setBranchId(Integer.parseInt(in.readLine()));
+			lb.setBranchId(0);
+			do {
+				try {
+					lb.setBranchId(Integer.parseInt(in.readLine()));
+				}  catch (NumberFormatException e) {
+					System.out.println("Please enter an int");
+				}
+			}while(lb.getBranchId()==0);
 			System.out.println("Enter the Library Branch Address");
 			lb.setBranchAddress(in.readLine());
 			lbDao.add(lb);
@@ -77,7 +83,14 @@ public class LibraryBranchService {
 		try {
 			lb.setBranchName(in.readLine());
 			System.out.println("Enter the LibraryBranch Id number");
-			lb.setBranchId(Integer.parseInt(in.readLine()));
+			lb.setBranchId(0);
+			do {
+				try {
+					lb.setBranchId(Integer.parseInt(in.readLine()));
+				}  catch (NumberFormatException e) {
+					System.out.println("Please enter an int");
+				}
+			}while(lb.getBranchId()==0);
 			lbDao.remove(lb);
 		}catch(IOException e)
 		{
@@ -91,11 +104,14 @@ public class LibraryBranchService {
 	}
 
 
-	public void Retrieve() throws IOException {
+	public void Retrieve(){
 		System.out.println("Enter the LibraryBranch Name to retreive a specific branch");
 		System.out.println("Enter all to retreive all branches");
 		List<LibraryBranch> lbList = getAll();
-		String input = in.readLine();
+		String input;
+		try {
+			input = in.readLine();
+		
 			if(input.equalsIgnoreCase("all"))
 			{
 				lbList.forEach(System.out::println);
@@ -110,7 +126,10 @@ public class LibraryBranchService {
 					return;
 				}
 
-			}	
+			}
+		} catch (IOException e) {
+			System.out.println("There was an input or output error");
+		}
 		}
 
 	public void Update() {
@@ -124,7 +143,14 @@ public class LibraryBranchService {
 		try {
 			name = in.readLine();
 			System.out.println("Enter the Borrower Id number");
-			int id =Integer.parseInt(in.readLine());
+			int id =0;
+			do {
+				try {
+					id =Integer.parseInt(in.readLine());
+				}  catch (NumberFormatException e) {
+					System.out.println("Please enter an int");
+				}
+			}while(id ==0);
 			for(Iterator<LibraryBranch> i = lbList.iterator(); i.hasNext();)
 			{
 				lb = i.next();

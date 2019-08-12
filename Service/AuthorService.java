@@ -40,13 +40,11 @@ public class AuthorService {
 					temp.setAuthorName(result.getString(2));
 					aList.add(temp);
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println("Error reading from database");
 				}
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Error reading from database");
 		}
 		return aList;
 	}
@@ -57,14 +55,19 @@ public class AuthorService {
 		try {
 			a.setAuthorName(in.readLine());
 			System.out.println("Enter the Author Id number");
+			a.setAuthorId(0);
+			do {
+				try {
 			a.setAuthorId(Integer.parseInt(in.readLine()));
+				}  catch (NumberFormatException e) {
+					System.out.println("Please enter an int");
+				}
+			}while(a.getAuthorId()==0);
 			aDao.add(a);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("There was an input or output error");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Error reading from database");
 		}
 	}
 
@@ -75,13 +78,19 @@ public class AuthorService {
 		try {
 			a.setAuthorName(in.readLine());
 			System.out.println("Enter the Author Id number");
+			a.setAuthorId(0);
+			do {
+				try {
 			a.setAuthorId(Integer.parseInt(in.readLine()));
+				}  catch (NumberFormatException e) {
+					System.out.println("Please enter an int");
+				}
+			}while(a.getAuthorId()==0);
 			aDao.remove(a);
 		}catch(IOException e)
 		{
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -89,11 +98,14 @@ public class AuthorService {
 	}
 
 
-	public void Retrieve() throws IOException {
+	public void Retrieve() {
 		System.out.println("Enter the Author Name to retreive a specific author");
 		System.out.println("Enter all to retreive all authors");
 		List<Author> aList = getAll();
-		String input = in.readLine();
+		String input;
+		try {
+			input = in.readLine();
+		
 			if(input.equalsIgnoreCase("all"))
 			{
 				aList.forEach(System.out::println);
@@ -107,7 +119,9 @@ public class AuthorService {
 					System.out.println(a);
 					return;
 				}
-
+			}
+			} catch (IOException e) {
+				System.out.println("There was an input or output error");
 			}	
 		}
 
@@ -119,7 +133,15 @@ public class AuthorService {
 		try {
 			a.setAuthorName(in.readLine());
 			System.out.println("Enter the Author Id number");
+			a.setAuthorId(0);
+			do {
+				try
+				{
 			a.setAuthorId(Integer.parseInt(in.readLine()));
+				}  catch (NumberFormatException e) {
+					System.out.println("Please enter an int");
+				}
+			}while(a.getAuthorId() ==0);
 			if(aList.contains(a))
 			{
 			System.out.println("Enter the new name or N/A or skip");
@@ -138,12 +160,10 @@ public class AuthorService {
 			}
 			}
 			
-		}catch(IOException e)
-		{
-			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("There was an input or output error");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("There was an error writing to the database");
 		}
 		
 	}

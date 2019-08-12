@@ -33,12 +33,7 @@ public class AdministratorService {
 	}
 	public void getBook()
 	{
-		try {
 			bs.Retrieve();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	public void addAuthor()
 	{
@@ -54,12 +49,7 @@ public class AdministratorService {
 	}
 	public void getAuthor()
 	{
-		try {
 			au.Retrieve();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	public void addPublisher()
 	{
@@ -75,12 +65,7 @@ public class AdministratorService {
 	}
 	public void getPublisher()
 	{
-		try {
 			ps.Retrieve();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	public void addLibraryBranch()
 	{
@@ -96,12 +81,7 @@ public class AdministratorService {
 	}
 	public void getLibraryBranch()
 	{
-		try {
 			lbs.Retrieve();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	public void addBorrower()
 	{
@@ -117,21 +97,11 @@ public class AdministratorService {
 	}
 	public void getBorrower()
 	{
-		try {
 			brs.Retrieve();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	public void OverrideDueDate()
 	{
-		try {
 			bls.Update();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 }

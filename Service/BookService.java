@@ -54,17 +54,36 @@ public class BookService {
 		try {
 			b.setTitle(in.readLine());
 			System.out.println("Enter the Book Id number");
-			b.setBookId(Integer.parseInt(in.readLine()));
+			b.setBookId(0);
+			do {
+				try {
+					b.setBookId(Integer.parseInt(in.readLine()));
+				}  catch (NumberFormatException e) {
+					System.out.println("Please enter an int");
+				}
+			}while(b.getBookId()==0);
 			System.out.println("Enter the author Id number");
-			b.setAuthId(Integer.parseInt(in.readLine()));
+			b.setAuthId(0);
+			do {
+				try {
+					b.setAuthId(Integer.parseInt(in.readLine()));
+				}  catch (NumberFormatException e) {
+					System.out.println("Please enter an int");
+				}
+			}while(b.getAuthId()==0);
 			System.out.println("Enter the publisher Id number");
-			b.setPubId(Integer.parseInt(in.readLine()));
+			b.setPubId(0);
+			do {
+				try {
+					b.setPubId(Integer.parseInt(in.readLine()));
+				}  catch (NumberFormatException e) {
+					System.out.println("Please enter an int");
+				}
+			}while(b.getPubId()==0);
 			bDao.add(b);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -76,7 +95,14 @@ public class BookService {
 		try {
 			b.setTitle(in.readLine());
 			System.out.println("Enter the Book Id number");
-			b.setBookId(Integer.parseInt(in.readLine()));
+			b.setBookId(0);
+			do {
+				try {
+					b.setBookId(Integer.parseInt(in.readLine()));
+				}  catch (NumberFormatException e) {
+					System.out.println("Please enter an int");
+				}
+			}while(b.getBookId()==0);
 			bDao.remove(b);
 		}catch(IOException e)
 		{
@@ -90,11 +116,14 @@ public class BookService {
 	}
 
 
-	public void Retrieve() throws IOException {
+	public void Retrieve()  {
 		System.out.println("Enter the Book Name to retreive a specific book");
 		System.out.println("Enter all to retreive all books");
 		List<Book> bList = getAll();
-		String input = in.readLine();
+		String input;
+		try {
+			input = in.readLine();
+		
 			if(input.equalsIgnoreCase("all"))
 			{
 				bList.forEach(System.out::println);
@@ -102,13 +131,15 @@ public class BookService {
 			for(Iterator<Book> i = bList.iterator(); i.hasNext();)
 			{
 				Book b = i.next();
-				//System.out.println(b.getName());
 				if(b.getTitle().equalsIgnoreCase(input))
 				{
 					System.out.println(b);
 					return;
 				}
 
+			}
+			} catch (IOException e) {
+				System.out.println("There was an input or output error");
 			}	
 		}
 
@@ -122,7 +153,13 @@ public class BookService {
 		try {
 			name = in.readLine();
 			System.out.println("Enter the Book Id number");
-			int id =Integer.parseInt(in.readLine());
+			int id = 0;
+			do {try {
+			id = Integer.parseInt(in.readLine());
+			}  catch (NumberFormatException e) {
+				System.out.println("Please enter an int");
+			}
+			}while(id ==0);
 			for(Iterator<Book> i = bList.iterator(); i.hasNext();)
 			{
 				b = i.next();
