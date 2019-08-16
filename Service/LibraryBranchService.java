@@ -26,7 +26,7 @@ public class LibraryBranchService {
 	
 	public List<LibraryBranch> getAll()
 	{
-		List<LibraryBranch> lbList = new ArrayList();
+		List<LibraryBranch> lbList = new ArrayList<LibraryBranch>();
 		
 		result = lbDao.getAll();
 		try {
@@ -133,7 +133,7 @@ public class LibraryBranchService {
 
 	public void Update() {
 		System.out.println("Enter the LibraryBranch Name");
-		List<LibraryBranch> lbList = new ArrayList();
+		List<LibraryBranch> lbList = new ArrayList<LibraryBranch>();
 		LibraryBranch lb = new LibraryBranch();
 		lbList = getAll();
 		int pos = -1;

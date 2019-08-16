@@ -8,7 +8,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.Anderson.DBLMS.Entity.Book;
 import com.Anderson.DBLMS.Entity.BookLoans;
 
 public class BookLoansDao extends Dao {

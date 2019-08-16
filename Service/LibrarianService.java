@@ -60,7 +60,7 @@ public class LibrarianService {
 			if(choice < count)
 			{
 				int pos = -1;
-				List<BookCopy> bcList = new ArrayList();
+				List<BookCopy> bcList = new ArrayList<BookCopy>();
 				BookCopy bc = new BookCopy();
 				try {
 					books.absolute(choice);

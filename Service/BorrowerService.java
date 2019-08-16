@@ -26,7 +26,7 @@ public class BorrowerService {
 	
 	public List<Borrower> getAll()
 	{
-		List<Borrower> bList = new ArrayList();
+		List<Borrower> bList = new ArrayList<Borrower>();
 		
 		result = bDao.getAll();
 		try {
@@ -135,7 +135,7 @@ public class BorrowerService {
 
 	public void Update() {
 		System.out.println("Enter the Borrower Name");
-		List<Borrower> bList = new ArrayList();
+		List<Borrower> bList = new ArrayList<Borrower>();
 		Borrower b = new Borrower();
 		bList = getAll();
 		int pos = -1;

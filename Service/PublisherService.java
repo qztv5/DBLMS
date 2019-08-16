@@ -24,7 +24,7 @@ public class PublisherService {
 	
 	public List<Publisher> getAll()
 	{
-		List<Publisher> pList = new ArrayList();
+		List<Publisher> pList = new ArrayList<Publisher>();
 		
 		result = pDao.getAll();
 		try {
@@ -131,7 +131,7 @@ public class PublisherService {
 
 	public void Update() {
 		System.out.println("Enter the Publisher Name");
-		List<Publisher> pList = new ArrayList();
+		List<Publisher> pList = new ArrayList<Publisher>();
 		Publisher p = new Publisher();
 		pList = getAll();
 		try {

@@ -3,7 +3,6 @@ package com.Anderson.DBLMS.Service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,9 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.Anderson.DBLMS.Dao.BookDao;
-import com.Anderson.DBLMS.Dao.Dao;
 import com.Anderson.DBLMS.Entity.Book;
-import com.Anderson.DBLMS.Entity.Borrower;
 
 public class BookService {
 
@@ -23,7 +20,7 @@ public class BookService {
 	
 	public List<Book> getAll()
 	{
-		List<Book> bList = new ArrayList();
+		List<Book> bList = new ArrayList<Book>();
 		
 		result = bDao.getAll();
 		try {
@@ -145,7 +142,7 @@ public class BookService {
 
 	public void Update() {
 		System.out.println("Enter the Book Name");
-		List<Book> bList = new ArrayList();
+		List<Book> bList = new ArrayList<Book>();
 		Book b = new Book();
 		bList = getAll();
 		int pos = -1;

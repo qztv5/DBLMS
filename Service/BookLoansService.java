@@ -7,22 +7,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.sql.Date;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import com.Anderson.DBLMS.Menu;
 import com.Anderson.DBLMS.Dao.BookLoansDao;
 import com.Anderson.DBLMS.Dao.Dao;
-import com.Anderson.DBLMS.Entity.Book;
-import com.Anderson.DBLMS.Entity.BookCopy;
 import com.Anderson.DBLMS.Entity.BookLoans;
 import com.Anderson.DBLMS.Entity.Borrower;
 import com.Anderson.DBLMS.Entity.LibraryBranch;
@@ -34,7 +28,7 @@ public class BookLoansService {
 	
 	public List<BookLoans> getAll()
 	{
-		List<BookLoans> blList = new ArrayList();
+		List<BookLoans> blList = new ArrayList<BookLoans>();
 		result = blDao.getAll();
 		try {
 			while(result.next())
@@ -58,7 +52,7 @@ public class BookLoansService {
 	}
 	
 	public void Update() {
-		List<BookLoans> blList = new ArrayList();
+		List<BookLoans> blList = new ArrayList<BookLoans>();
 		BookLoans bl = new BookLoans();
 		blList = getAll();
 		int pos = -1;	
@@ -292,7 +286,7 @@ public class BookLoansService {
 			if(choice < count)
 			{
 				int pos = -1;
-				List<BookLoans> blList = new ArrayList();
+				List<BookLoans> blList = new ArrayList<BookLoans>();
 				BookLoans bl = new BookLoans();
 				try {
 					books.absolute(choice);

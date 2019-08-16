@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.Anderson.DBLMS.Dao.BookCopiesDao;
-import com.Anderson.DBLMS.Dao.BookLoansDao;
 import com.Anderson.DBLMS.Entity.BookCopy;
 
 
@@ -19,7 +18,7 @@ public class BookCopyService {
 	
 	public List<BookCopy> getAll()
 	{
-		List<BookCopy> bcList = new ArrayList();
+		List<BookCopy> bcList = new ArrayList<BookCopy>();
 		result = bcDao.getAll();
 		try {
 			while(result.next())

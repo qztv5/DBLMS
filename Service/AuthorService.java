@@ -9,13 +9,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Scanner;
-import java.util.stream.Collectors;
 
 import com.Anderson.DBLMS.Dao.AuthorDao;
 import com.Anderson.DBLMS.Dao.Dao;
 import com.Anderson.DBLMS.Entity.Author;
-import com.Anderson.DBLMS.Entity.Book;
 
 
 
@@ -28,7 +25,7 @@ public class AuthorService {
 	
 	public List<Author> getAll()
 	{
-		List<Author> aList = new ArrayList();
+		List<Author> aList = new ArrayList<Author>();
 		
 		result = aDao.getAll();
 		try {
@@ -127,7 +124,7 @@ public class AuthorService {
 
 	public void Update() {
 		System.out.println("Enter the Author Name");
-		List<Author> aList = new ArrayList();
+		List<Author> aList = new ArrayList<Author>();
 		Author a = new Author();
 		aList = getAll();
 		try {
